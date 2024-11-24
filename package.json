@@ -19,6 +19,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@types/formidable": "^3.4.5",
     "@types/mdx": "^2.0.13",
+    "@vercel/analytics": "^1.4.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "formidable": "^3.5.2",
