@@ -111,7 +111,7 @@ export default function RemoveBackground() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <main className="h-[calc(100vh-var(--header-height))] bg-background overflow-y-auto">
       {!loading && (
         <UploadSection onFileSelect={handleFileSelect} isLoading={loading} />
       )}
@@ -137,6 +137,6 @@ export default function RemoveBackground() {
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 }
