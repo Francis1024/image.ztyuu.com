@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     siteName: "PixelPulse",
     images: [
       {
-        url: "/images/og-image.png",
+        url: "https://mp9tsqs9pinprjrv.public.blob.vercel-storage.com/remove-b83wdTVaIhYV2q8XTOp2CQPEQEMOre.jpg",
         width: 1200,
         height: 630,
         alt: "PixelPulse - AI Background Remover",
@@ -42,7 +42,9 @@ export const metadata: Metadata = {
     title: "PixelPulse - AI Background Remover",
     description:
       "Transform your images instantly with our AI-powered background removal tool. No signup required.",
-    images: ["/images/og-image.png"],
+    images: [
+      "https://mp9tsqs9pinprjrv.public.blob.vercel-storage.com/remove-b83wdTVaIhYV2q8XTOp2CQPEQEMOre.jpg",
+    ],
   },
   keywords: [
     "background remover",
@@ -60,8 +62,8 @@ export const metadata: Metadata = {
   ],
   creator: "PixelPulse",
   icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+    icon: "/images/logo.svg",
+    apple: "/images/logo.svg",
   },
 };
 
