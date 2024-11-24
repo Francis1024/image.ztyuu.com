@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     const base64Image = buffer.toString('base64');
 
     // 调用本地处理服务
-    const response = await fetch('http://localhost:3001/api/processimage', {
+    const response = await fetch('https://navapi.ztyuu.com/api/processimage', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
