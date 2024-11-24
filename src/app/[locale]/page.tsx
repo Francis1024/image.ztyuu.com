@@ -9,6 +9,7 @@ import Image from "next/image";
 import { LoadingSpinner } from "@/components/loading-spinner";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { removeBackground } from "@imgly/background-removal";
 
 interface UploadSectionProps {
   onFileSelect: (file: File) => Promise<void>;
@@ -56,18 +57,21 @@ export default function RemoveBackground() {
     setLoading(true);
 
     try {
-      const formData = new FormData();
-      formData.append("image", file);
-
-      const response = await fetch("/api/remove-background", {
-        method: "POST",
-        body: formData,
+      console.log("Starting background removal...");
+      const processedImage = await removeBackground(file, {
+        debug: true,
+        model: "isnet_quint8",
+        output: {
+          format: "image/png",
+          quality: 0.8,
+        },
+        progress: (key: string, current: number, total: number) => {
+          console.log(`Processing progress - ${key}: ${current}/${total}`);
+        },
       });
 
-      if (!response.ok) throw new Error("Processing failed");
-
-      const blob = await response.blob();
-      setResultUrl(URL.createObjectURL(blob));
+      console.log("Background removal completed");
+      setResultUrl(URL.createObjectURL(processedImage));
     } catch (error) {
       console.error("Error:", error);
       toast({

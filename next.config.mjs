@@ -7,13 +7,22 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.externals.push({
-        '@imgly/background-removal-node': 'commonjs @imgly/background-removal-node',
-      })
-    }
-    return config
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'require-corp',
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
+          },
+        ],
+      },
+    ]
   },
 };
 
