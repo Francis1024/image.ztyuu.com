@@ -10,6 +10,11 @@ import { LoadingSpinner } from "@/components/loading-spinner";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
+interface UploadSectionProps {
+  onFileSelect: (file: File) => Promise<void>;
+  isLoading: boolean;
+}
+
 export default function RemoveBackground() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -107,7 +112,9 @@ export default function RemoveBackground() {
 
   return (
     <div className="min-h-screen bg-background">
-      {!loading && <UploadSection onFileSelect={handleFileSelect} />}
+      {!loading && (
+        <UploadSection onFileSelect={handleFileSelect} isLoading={loading} />
+      )}
 
       {/* 处理中的预览区域 */}
       {loading && (

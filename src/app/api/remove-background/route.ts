@@ -56,7 +56,10 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Error:', error)
     return NextResponse.json(
-      { error: '处理图片时出错', details: error.message },
+      {
+        error: '处理图片时出错',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     )
   }
