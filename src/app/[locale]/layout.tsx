@@ -19,31 +19,49 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Francis's Journey",
-  description: "这是一个关于Francis的旅程。/ This is a journey about Francis.",
+  title: "PixelPulse - AI Background Remover",
+  description:
+    "Remove image backgrounds instantly with AI technology. Fast, free, and easy to use.",
   openGraph: {
-    title: "Francis's Journey",
+    title: "PixelPulse - AI Background Remover",
     description:
-      "这是一个关于Francis的旅程。/ This is a journey about Francis.",
-    url: "https://ztyuu.com",
-    siteName: "Francis's Journey", // 添加 og:site_name
+      "Transform your images instantly with our AI-powered background removal tool. No signup required.",
+    url: "https://pixelpulse.ztyuu.com",
+    siteName: "PixelPulse",
     images: [
       {
-        url: "https://mp9tsqs9pinprjrv.public.blob.vercel-storage.com/%E4%B8%8B%E8%BD%BD-Om3YrcBEFnZlgWg05C7kT19GzUI83y.png",
-        width: 800,
-        height: 600,
-        alt: "网站 Logo",
+        url: "/images/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "PixelPulse - AI Background Remover",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Francis's Journey",
+    title: "PixelPulse - AI Background Remover",
     description:
-      "这是一个关于Francis的旅程。/ This is a journey about Francis.",
-    images: [
-      "https://mp9tsqs9pinprjrv.public.blob.vercel-storage.com/%E4%B8%8B%E8%BD%BD-Om3YrcBEFnZlgWg05C7kT19GzUI83y.png",
-    ],
+      "Transform your images instantly with our AI-powered background removal tool. No signup required.",
+    images: ["/images/og-image.png"],
+  },
+  keywords: [
+    "background remover",
+    "AI image tool",
+    "remove background",
+    "image editing",
+    "online photo editor",
+    "free background remover",
+  ],
+  authors: [
+    {
+      name: "PixelPulse",
+      url: "https://pixelpulse.ztyuu.com",
+    },
+  ],
+  creator: "PixelPulse",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
 };
 
