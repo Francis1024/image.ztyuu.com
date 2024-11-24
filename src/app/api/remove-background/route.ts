@@ -1,66 +1,63 @@
-import { NextRequest, NextResponse } from 'next/server'
-import * as fs from 'fs/promises'
-import path from 'path'
-import { exec } from 'child_process'
-import { promisify } from 'util'
+import { NextResponse } from "next/server";
 
-const execAsync = promisify(exec)
-
-export async function POST(req: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const data = await req.formData()
-    const file = data.get('image') as File
+    const formData = await request.formData();
+    const file = formData.get('image');
 
-    if (!file) {
+    if (!file || !(file instanceof File)) {
       return NextResponse.json(
-        { error: '没有找到图片' },
+        { error: 'Invalid file upload' },
         { status: 400 }
-      )
+      );
     }
 
-    // 创建临时目录
-    const tempDir: string = '/tmp/temp_images'
-    try {
-      await fs.access(tempDir)
-    } catch {
-      await fs.mkdir(tempDir, { recursive: true })
+    // 将文件转换为 base64
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    const base64Image = buffer.toString('base64');
+
+    // 调用本地处理服务
+    const response = await fetch('http://localhost:3001/api/processimage', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        image: `data:${file.type};base64,${base64Image}`
+      })
+    });
+
+    if (!response.ok) {
+      console.error('Processing error:', response.status, response.statusText);
+      throw new Error(`Processing failed: ${response.statusText}`);
     }
 
-    // 生成唯一的文件名
-    const timestamp = Date.now()
-    const inputPath = path.join(tempDir, `input-${timestamp}.png`)
+    // 获取处理后的图片
+    const processedImageBuffer = await response.arrayBuffer();
 
-    // 保存上传的文件
-    const buffer = Buffer.from(await file.arrayBuffer())
-    await fs.writeFile(inputPath, buffer)
-
-    // 调用处理脚本
-    const scriptPath = path.join(process.cwd(), 'scripts', 'processImage.js')
-    const command = `node -e "require('${scriptPath}')('${inputPath}')"`;
-
-    await execAsync(command)
-
-    // 读取处理后的文件
-    const outputPath = inputPath.replace('.png', '-output.png')
-    const result = await fs.readFile(outputPath)
-
-    // 清理临时文件
-    await fs.unlink(inputPath).catch(console.error)
-    await fs.unlink(outputPath).catch(console.error)
-
-    return new NextResponse(result, {
+    // 返回处理后的图片
+    return new NextResponse(processedImageBuffer, {
       headers: {
         'Content-Type': 'image/png',
+        'Cache-Control': 'public, max-age=31536000',
       },
-    })
+    });
+
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Error:', error);
     return NextResponse.json(
       {
-        error: '处理图片时出错',
+        error: 'Failed to process image',
         details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
-    )
+    );
   }
 }
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
