@@ -12,20 +12,14 @@ export async function POST(request: Request) {
       );
     }
 
-    // 将文件转换为 base64
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const base64Image = buffer.toString('base64');
+    // 创建新的 FormData 并传递文件
+    const newFormData = new FormData();
+    newFormData.append('image', file);
 
     // 调用本地处理服务
-    const response = await fetch('https://navapi.ztyuu.com/api/processimage', {
+    const response = await fetch('http://localhost:3001/api/processimage', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        image: `data:${file.type};base64,${base64Image}`
-      })
+      body: newFormData  // 直接发送 FormData
     });
 
     if (!response.ok) {
