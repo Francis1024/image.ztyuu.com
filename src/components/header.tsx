@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "./ui/button";
-import { Moon, Sun, Globe } from "lucide-react";
+import { Moon, Sun, Globe, Coffee } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,7 +41,16 @@ export function Header() {
           <span className="font-bold text-xl">{t("header.title")}</span>
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
+          <Link
+            href="https://buymeacoffee.com/dingdongnav"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-primary transition-all duration-300 hover:scale-110"
+          >
+            <Coffee className="h-5 w-5" />
+          </Link>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <div className="flex items-center cursor-pointer hover:text-primary">
