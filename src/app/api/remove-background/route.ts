@@ -1,5 +1,7 @@
+export const runtime = 'nodejs'
+
 import { NextResponse } from "next/server";
-import { removeBackground } from "@imgly/background-removal-node";
+import { removeBackground, type Config, } from "@imgly/background-removal-node";
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import { tmpdir } from 'os';
@@ -31,14 +33,13 @@ export async function POST(request: Request) {
     await writeFile(tempPath, buffer);
 
     // 配置选项
-    const config = {
+    const config: Config = {
       publicPath: 'https://cdn.jsdelivr.net/npm/@imgly/background-removal-node@1.4.5/dist/',
       debug: true,
       model: 'small',
       output: {
         format: 'image/png',
         quality: 1,
-        type: 'foreground'
       },
       progress: (key: string, current: number, total: number) => {
         console.log(`下载进度 ${key}: ${current}/${total}`);

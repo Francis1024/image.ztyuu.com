@@ -4,8 +4,12 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  webpack: (config) => {
-    config.externals = [...config.externals]
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals.push({
+        '@imgly/background-removal-node': 'commonjs @imgly/background-removal-node',
+      })
+    }
     return config
   },
 };
