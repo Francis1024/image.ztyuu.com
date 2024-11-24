@@ -5,7 +5,7 @@ const nextConfig = {
     unoptimized: true,
   },
   webpack: (config) => {
-    config.externals = [...config.externals, 'sharp']
+    config.externals = [...config.externals]
     return config
   },
 };

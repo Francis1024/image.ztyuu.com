@@ -56,8 +56,6 @@ export async function POST(request: Request) {
   }
 }
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+export const runtime = 'nodejs';
+export const maxDuration = 300; // 5分钟超时
+export const dynamic = 'force-dynamic';
