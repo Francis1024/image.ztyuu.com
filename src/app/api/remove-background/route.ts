@@ -19,11 +19,11 @@ export async function POST(req: NextRequest) {
     }
 
     // 创建临时目录
-    const tempDir = path.join(process.cwd(), 'temp_images')
+    const tempDir: string = '/tmp/temp_images'
     try {
       await fs.access(tempDir)
     } catch {
-      await fs.mkdir(tempDir)
+      await fs.mkdir(tempDir, { recursive: true })
     }
 
     // 生成唯一的文件名
