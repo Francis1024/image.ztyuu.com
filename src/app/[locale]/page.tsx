@@ -18,6 +18,11 @@ interface UploadSectionProps {
   isLoading: boolean;
 }
 
+interface ClassificationResult {
+  label: string;
+  score: number;
+}
+
 export default function RemoveBackground() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -36,6 +41,13 @@ export default function RemoveBackground() {
   >([]);
   const [currentImageId, setCurrentImageId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [classificationResult, setClassificationResult] = useState<
+    ClassificationResult[] | null
+  >(null);
+  const [classificationReady, setClassificationReady] = useState<
+    boolean | null
+  >(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // 检查语言设置
   useEffect(() => {
@@ -143,6 +155,29 @@ export default function RemoveBackground() {
     }
   };
 
+  const classify = async (text: string) => {
+    if (!text) return;
+    if (classificationReady === null) setClassificationReady(false);
+
+    try {
+      const response = await fetch(
+        `/api/classify?text=${encodeURIComponent(text)}`
+      );
+
+      if (!classificationReady) setClassificationReady(true);
+
+      if (!response.ok) {
+        throw new Error("Classification request failed");
+      }
+
+      const json = await response.json();
+      setClassificationResult(json);
+    } catch (error) {
+      console.error("Classification error:", error);
+      setClassificationResult(null);
+    }
+  };
+
   return (
     <div className="min-h-[calc(100vh-var(--header-height))] flex flex-col">
       <div className="flex-1 flex flex-col">
@@ -172,6 +207,34 @@ export default function RemoveBackground() {
         ) : (
           <UploadSection onFileSelect={handleFileSelect} isLoading={loading} />
         )}
+
+        {/* Add classification section */}
+        <div className="mt-8 p-4 border rounded-lg">
+          <h2 className="text-2xl font-bold mb-4">
+            {t("Text Classification")}
+          </h2>
+          <input
+            type="text"
+            className="w-full max-w-xs p-2 border border-gray-300 rounded mb-4"
+            placeholder={t("Enter text here")}
+            onChange={(e) => {
+              setErrorMessage(null);
+              classify(e.target.value);
+            }}
+          />
+
+          {classificationReady !== null && (
+            <div className="bg-gray-100 p-2 rounded">
+              {errorMessage ? (
+                <p className="text-red-500">{errorMessage}</p>
+              ) : !classificationReady || !classificationResult ? (
+                <p>{t("Loading...")}</p>
+              ) : (
+                <pre>{JSON.stringify(classificationResult, null, 2)}</pre>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* 隐藏的文件输入 */}

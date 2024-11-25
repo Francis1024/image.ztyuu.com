@@ -49,5 +49,8 @@ export default {
     'selectImage': '选择图片',
     'processedImage': '处理后的图片',
     'deleteImage': '删除图片'
-  }
+  },
+  'Text Classification': '文本分类',
+  'Enter text here': '在此输入文本',
+  'Loading...': '加载中...'
 } as const

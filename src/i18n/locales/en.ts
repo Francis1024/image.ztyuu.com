@@ -49,5 +49,8 @@ export default {
     selectImage: 'Select image',
     processedImage: 'Processed image',
     deleteImage: 'Delete image'
-  }
+  },
+  "Text Classification": "Text Classification",
+  "Enter text here": "Enter text here",
+  "Loading...": "Loading..."
 } as const;
