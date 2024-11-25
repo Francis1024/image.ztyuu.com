@@ -52,5 +52,33 @@ export default {
   },
   "Text Classification": "Text Classification",
   "Enter text here": "Enter text here",
-  "Loading...": "Loading..."
+  "Loading...": "Loading...",
+  tabs: {
+    classicMode: "Classic Mode",
+    aiMode: "AI Mode"
+  },
+  alert: {
+    modelReady: {
+      title: "AI Model Ready",
+      description: "You can now use AI mode to process images"
+    }
+  },
+  error: {
+    modelNotReady: "AI model is not ready yet",
+    processingFailed: "Failed to process image"
+  },
+  loading: {
+    removingBackground: "Removing background...",
+    modelLoading: "Loading AI model..."
+  },
+  toast: {
+    success: {
+      title: "Success",
+      modelLoaded: "AI model loaded successfully"
+    },
+    error: {
+      title: "Error",
+      processingFailed: "Failed to process image"
+    }
+  }
 } as const;

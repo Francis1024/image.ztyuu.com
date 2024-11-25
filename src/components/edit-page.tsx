@@ -91,7 +91,7 @@ export function EditPage({
   }, []);
 
   return (
-    <div className="min-h-[calc(100vh-var(--header-height))] h-[calc(100vh-var(--header-height))] flex flex-col">
+    <div className="flex flex-col">
       <div className="flex flex-1 min-h-0">
         <div className="flex-1 relative p-4 flex flex-col">
           <div className="relative flex-1 w-full flex items-center justify-center">

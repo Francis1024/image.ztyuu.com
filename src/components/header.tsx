@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "./ui/button";
-import { Moon, Sun, Globe, Coffee } from "lucide-react";
+import { Moon, Sun, Globe, Coffee, Loader2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,13 +13,33 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useI18n } from "@/i18n/client";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState, useEffect } from "react";
 
-export function Header() {
+interface HeaderProps {
+  onModeChange?: (mode: "classic" | "ai") => void;
+}
+
+export function Header({ onModeChange }: HeaderProps) {
   const { setTheme, theme } = useTheme();
   const t = useI18n();
   const router = useRouter();
   const pathname = usePathname();
   const currentLocale = pathname.split("/")[1];
+  const [modelReady, setModelReady] = useState(false);
+
+  useEffect(() => {
+    const loadModel = async () => {
+      try {
+        // await your model loading logic here
+        setModelReady(true);
+      } catch (error) {
+        console.error("Failed to load model:", error);
+      }
+    };
+
+    loadModel();
+  }, []);
 
   const handleLanguageChange = (newLocale: string) => {
     router.push(`/${newLocale}`);
@@ -40,6 +60,27 @@ export function Header() {
           />
           <span className="font-bold text-xl">{t("header.title")}</span>
         </Link>
+
+        <div className="flex items-center gap-4">
+          <Tabs
+            defaultValue="classic"
+            onValueChange={(value) => onModeChange?.(value as "classic" | "ai")}
+          >
+            <TabsList className="ml-4">
+              <TabsTrigger value="classic">{t("tabs.classicMode")}</TabsTrigger>
+              <TabsTrigger
+                value="ai"
+                disabled={!modelReady}
+                className="relative"
+              >
+                {t("tabs.aiMode")}
+                {!modelReady && (
+                  <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                )}
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
 
         <div className="flex items-center space-x-2">
           <DropdownMenu>

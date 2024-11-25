@@ -52,5 +52,33 @@ export default {
   },
   'Text Classification': '文本分类',
   'Enter text here': '在此输入文本',
-  'Loading...': '加载中...'
+  'Loading...': '加载中...',
+  'tabs': {
+    'classicMode': '经典模式',
+    'aiMode': 'AI 模式'
+  },
+  'alert': {
+    'modelReady': {
+      'title': 'AI 模型已就绪',
+      'description': '现在可以使用 AI 模式处理图片'
+    }
+  },
+  'error': {
+    'modelNotReady': 'AI 模型尚未准备就绪',
+    'processingFailed': '图片处理失败'
+  },
+  'loading': {
+    'removingBackground': '正在移除背景...',
+    'modelLoading': '正在加载 AI 模型...'
+  },
+  'toast': {
+    'success': {
+      'title': '成功',
+      'modelLoaded': 'AI 模型加载完成'
+    },
+    'error': {
+      'title': '错误',
+      'processingFailed': '处理失败'
+    }
+  }
 } as const

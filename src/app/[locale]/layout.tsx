@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
-import { Header } from "@/components/header";
 import { I18nProviderClient } from "@/i18n/client";
 
 const geistSans = localFont({
@@ -83,7 +82,6 @@ export default function LocaleLayout({
         disableTransitionOnChange
       >
         <I18nProviderClient locale={params.locale}>
-          <Header />
           <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
           <Toaster />
         </I18nProviderClient>
