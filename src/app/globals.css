@@ -33,6 +33,7 @@
     --ring: 0 0% 3.9%;
 
     --radius: 0.5rem;
+    --header-height: 64px;
   }
 
   .dark {

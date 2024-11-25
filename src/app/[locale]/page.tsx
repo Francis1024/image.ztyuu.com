@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { UploadSection } from "@/components/upload-section";
 import { EditPage } from "@/components/edit-page";
 import { useToast } from "@/hooks/use-toast";
@@ -10,6 +10,8 @@ import { LoadingSpinner } from "@/components/loading-spinner";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { removeBackground } from "@imgly/background-removal";
+import { ImageList } from "@/components/image-list";
+import { v4 as uuidv4 } from "uuid";
 
 interface UploadSectionProps {
   onFileSelect: (file: File) => Promise<void>;
@@ -25,6 +27,15 @@ export default function RemoveBackground() {
   const t = useI18n();
   const router = useRouter();
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [images, setImages] = useState<
+    Array<{
+      id: string;
+      originalUrl: string;
+      processedUrl: string;
+    }>
+  >([]);
+  const [currentImageId, setCurrentImageId] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 检查语言设置
   useEffect(() => {
@@ -42,22 +53,31 @@ export default function RemoveBackground() {
     }
   }, [router]);
 
+  const handleImageSelect = (id: string) => {
+    setCurrentImageId(id);
+    const currentImage = images.find((img) => img.id === id);
+    if (currentImage) {
+      setResultUrl(currentImage.processedUrl);
+
+      // 同样使用 HTMLImageElement
+      const imgElement = document.createElement("img");
+      imgElement.onload = () => {
+        setDimensions({
+          width: imgElement.naturalWidth,
+          height: imgElement.naturalHeight,
+        });
+      };
+      imgElement.src = currentImage.processedUrl;
+    }
+  };
+
   const handleFileSelect = async (file: File) => {
-    const img = document.createElement("img");
-    img.onload = () => {
-      setDimensions({
-        width: img.width,
-        height: img.height,
-      });
-    };
-    img.src = URL.createObjectURL(file);
-    setSelectedFile(file);
-    setPreviewUrl(URL.createObjectURL(file));
-    setResultUrl(null);
+    const id = uuidv4();
+    const originalUrl = URL.createObjectURL(file);
+
     setLoading(true);
 
     try {
-      console.log("Starting background removal...");
       const processedImage = await removeBackground(file, {
         debug: true,
         model: "isnet_quint8",
@@ -65,24 +85,45 @@ export default function RemoveBackground() {
           format: "image/png",
           quality: 0.8,
         },
-        progress: (key: string, current: number, total: number) => {
-          console.log(`Processing progress - ${key}: ${current}/${total}`);
-        },
       });
 
-      console.log("Background removal completed");
-      setResultUrl(URL.createObjectURL(processedImage));
+      const processedUrl = URL.createObjectURL(processedImage);
+
+      const imgElement = document.createElement("img");
+      imgElement.onload = () => {
+        setDimensions({
+          width: imgElement.naturalWidth,
+          height: imgElement.naturalHeight,
+        });
+      };
+      imgElement.src = processedUrl;
+
+      setImages((prev) => [
+        ...prev,
+        {
+          id,
+          originalUrl,
+          processedUrl,
+        },
+      ]);
+      setCurrentImageId(id);
+      setResultUrl(processedUrl);
     } catch (error) {
-      console.error("Error:", error);
       toast({
         variant: "destructive",
         title: t("toast.error.title"),
         description: t("toast.error.processingFailed"),
       });
-      setSelectedFile(null);
-      setPreviewUrl(null);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleImageDelete = (id: string) => {
+    setImages((prev) => prev.filter((img) => img.id !== id));
+    if (currentImageId === id) {
+      const remaining = images.filter((img) => img.id !== id);
+      setCurrentImageId(remaining.length > 0 ? remaining[0].id : null);
     }
   };
 
@@ -102,45 +143,62 @@ export default function RemoveBackground() {
     }
   };
 
-  // 如果有处理结果，显示编辑页面
-  if (resultUrl && previewUrl) {
-    return (
-      <EditPage
-        imageUrl={resultUrl}
-        originalUrl={previewUrl}
-        onDownload={() => handleDownload("normal")}
-        dimensions={dimensions}
-      />
-    );
-  }
-
   return (
-    <main className="h-[calc(100vh-var(--header-height))] bg-background overflow-y-auto">
-      {!loading && (
-        <UploadSection onFileSelect={handleFileSelect} isLoading={loading} />
-      )}
-
-      {/* 处理中的预览区域 */}
-      {loading && (
-        <div className="max-w-6xl mx-auto mt-16 px-4">
-          <div className="mb-4">
-            <h3 className="text-lg font-semibold">
-              {t("upload.preview.title")}
-            </h3>
-          </div>
-          <div className="relative aspect-video">
-            <Image
-              src={previewUrl!}
-              alt="Preview"
-              fill
-              className="object-contain rounded-lg opacity-50"
+    <div className="min-h-[calc(100vh-var(--header-height))] flex flex-col">
+      <div className="flex-1 flex flex-col">
+        {currentImageId ? (
+          <EditPage
+            imageUrl={
+              images.find((img) => img.id === currentImageId)?.processedUrl ||
+              ""
+            }
+            originalUrl={
+              images.find((img) => img.id === currentImageId)?.originalUrl || ""
+            }
+            onDownload={handleDownload}
+            dimensions={{
+              width: dimensions.width,
+              height: dimensions.height,
+            }}
+          >
+            <ImageList
+              images={images}
+              currentImageId={currentImageId}
+              onAddClick={() => fileInputRef.current?.click()}
+              onImageSelect={handleImageSelect}
+              onImageDelete={handleImageDelete}
             />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <LoadingSpinner text={t("upload.preview.loadingText")} />
+          </EditPage>
+        ) : (
+          <UploadSection onFileSelect={handleFileSelect} isLoading={loading} />
+        )}
+      </div>
+
+      {/* 隐藏的文件输入 */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        className="hidden"
+        accept="image/*"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) handleFileSelect(file);
+        }}
+      />
+
+      {/* Loading 遮罩 */}
+      {loading && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 shadow-xl">
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+              <p className="text-lg font-medium text-gray-700">
+                {t("loading.removingBackground")}
+              </p>
             </div>
           </div>
         </div>
       )}
-    </main>
+    </div>
   );
 }

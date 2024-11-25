@@ -40,5 +40,14 @@ export default {
       'title': '错误',
       'processingFailed': '图片处理失败，请重试。'
     }
+  },
+  'loading': {
+    'removingBackground': '正在移除背景...'
+  },
+  'imageList': {
+    'addMore': '添加更多图片',
+    'selectImage': '选择图片',
+    'processedImage': '处理后的图片',
+    'deleteImage': '删除图片'
   }
 } as const

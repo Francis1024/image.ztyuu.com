@@ -40,5 +40,14 @@ export default {
       'title': 'Error',
       'processingFailed': 'Failed to process image. Please try again.'
     }
+  },
+  loading: {
+    removingBackground: 'Removing background...'
+  },
+  imageList: {
+    addMore: 'Add more images',
+    selectImage: 'Select image',
+    processedImage: 'Processed image',
+    deleteImage: 'Delete image'
   }
 } as const;
