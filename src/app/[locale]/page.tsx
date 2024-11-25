@@ -241,8 +241,12 @@ export default function RemoveBackground() {
           // 更新 alpha 通道
           console.log("更新 alpha 通道");
           const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          for (let i = 0; i < mask.data.length; ++i) {
-            imageData.data[4 * i + 3] = mask.data[i];
+          if (mask && mask.data) {
+            for (let i = 0; i < mask.data.length; ++i) {
+              imageData.data[4 * i + 3] = mask.data[i];
+            }
+          } else {
+            console.error("Mask is undefined or has no data");
           }
           ctx.putImageData(imageData, 0, 0);
 
