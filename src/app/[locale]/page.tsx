@@ -197,7 +197,7 @@ export default function RemoveBackground() {
       });
     };
     imgElement.src = processedUrl;
-
+    setLoading(false);
     setImages((prev) => [
       ...prev,
       {
