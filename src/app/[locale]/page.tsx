@@ -73,7 +73,7 @@ export default function RemoveBackground() {
   useEffect(() => {
     if (!worker.current) {
       console.log("初始化 Worker...");
-      worker.current = new Worker(new URL("./worker.ts", import.meta.url), {
+      worker.current = new Worker(new URL("./worker.js", import.meta.url), {
         type: "module",
       });
     }
@@ -317,12 +317,7 @@ export default function RemoveBackground() {
           />
         </EditPage>
       ) : (
-        <UploadSection
-          onFileSelect={handleFileSelect}
-          isLoading={loading}
-          mode={processingMode}
-          modelReady={modelReady}
-        />
+        <UploadSection onFileSelect={handleFileSelect} isLoading={loading} />
       )}
     </div>
   );
@@ -369,6 +364,17 @@ export default function RemoveBackground() {
             </div>
           </div>
         )}
+
+        {/* Footer Section */}
+        <footer className="text-center p-4 mt-auto">
+          <a
+            href="https://www.briaai.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Powered by Briaai&apos;s RMBG-1.4 Model
+          </a>
+        </footer>
       </div>
     </>
   );

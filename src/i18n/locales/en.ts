@@ -39,10 +39,16 @@ export default {
     'error': {
       'title': 'Error',
       'processingFailed': 'Failed to process image. Please try again.'
-    }
+    },
+    success: {
+      title: "Success",
+      modelLoaded: "AI model loaded successfully"
+    },
   },
   loading: {
-    removingBackground: 'Removing background...'
+    removingBackground: 'Removing background...',
+    modelLoading: "Loading AI model..."
+
   },
   imageList: {
     addMore: 'Add more images',
@@ -67,18 +73,5 @@ export default {
     modelNotReady: "AI model is not ready yet",
     processingFailed: "Failed to process image"
   },
-  loading: {
-    removingBackground: "Removing background...",
-    modelLoading: "Loading AI model..."
-  },
-  toast: {
-    success: {
-      title: "Success",
-      modelLoaded: "AI model loaded successfully"
-    },
-    error: {
-      title: "Error",
-      processingFailed: "Failed to process image"
-    }
-  }
+
 } as const;

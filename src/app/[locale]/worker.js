@@ -1,3 +1,4 @@
+// @ts-ignore
 import { AutoModel, AutoProcessor, env, RawImage } from "@huggingface/transformers";
 
 // Since we will download the model from the Hugging Face Hub, we can skip the local model check

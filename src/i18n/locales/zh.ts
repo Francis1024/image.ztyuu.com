@@ -39,10 +39,15 @@ export default {
     'error': {
       'title': '错误',
       'processingFailed': '图片处理失败，请重试。'
-    }
+    },
+    'success': {
+      'title': '成功',
+      'modelLoaded': 'AI 模型加载完成'
+    },
   },
   'loading': {
-    'removingBackground': '正在移除背景...'
+    'removingBackground': '正在移除背景...',
+    'modelLoading': '正在加载 AI 模型...'
   },
   'imageList': {
     'addMore': '添加更多图片',
@@ -67,18 +72,4 @@ export default {
     'modelNotReady': 'AI 模型尚未准备就绪',
     'processingFailed': '图片处理失败'
   },
-  'loading': {
-    'removingBackground': '正在移除背景...',
-    'modelLoading': '正在加载 AI 模型...'
-  },
-  'toast': {
-    'success': {
-      'title': '成功',
-      'modelLoaded': 'AI 模型加载完成'
-    },
-    'error': {
-      'title': '错误',
-      'processingFailed': '处理失败'
-    }
-  }
 } as const
