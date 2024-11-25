@@ -15,7 +15,7 @@ import {
 import { useI18n } from "@/i18n/client";
 
 export function Header() {
-  const { setTheme } = useTheme();
+  const { setTheme, theme } = useTheme();
   const t = useI18n();
   const router = useRouter();
   const pathname = usePathname();
@@ -41,22 +41,12 @@ export function Header() {
           <span className="font-bold text-xl">{t("header.title")}</span>
         </Link>
 
-        <div className="flex items-center gap-4">
-          <Link
-            href="https://buymeacoffee.com/dingdongnav"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-primary transition-all duration-300 hover:scale-110"
-          >
-            <Coffee className="h-5 w-5" />
-          </Link>
-
+        <div className="flex items-center space-x-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div className="flex items-center cursor-pointer hover:text-primary">
-                <Globe className="h-5 w-5" />
-                <span className="ml-1">{t("header.currentLang")}</span>
-              </div>
+              <Button variant="ghost" size="icon" className="w-9 h-9">
+                <Globe className="h-[1.2rem] w-[1.2rem]" />
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => handleLanguageChange("en")}>
@@ -68,26 +58,26 @@ export function Header() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="link" size="icon">
-                <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                <span className="sr-only">{t("header.themeToggle")}</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setTheme("light")}>
-                {t("header.themes.light")}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("dark")}>
-                {t("header.themes.dark")}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("system")}>
-                {t("header.themes.system")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="w-9 h-9"
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          >
+            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-transform dark:rotate-0 dark:scale-100" />
+            <span className="sr-only">{t("header.themeToggle")}</span>
+          </Button>
+
+          <Button variant="ghost" size="icon" className="w-9 h-9" asChild>
+            <Link
+              href="https://buymeacoffee.com/dingdongnav"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Coffee className="h-[1.2rem] w-[1.2rem]" />
+            </Link>
+          </Button>
         </div>
       </div>
     </header>
